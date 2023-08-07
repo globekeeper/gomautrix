@@ -20,9 +20,9 @@ import (
 	"github.com/rs/zerolog"
 	"maunium.net/go/maulogger/v2/maulogadapt"
 
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
-	"maunium.net/go/mautrix/pushrules"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
+	"github.com/globekeeper/gomautrix/pushrules"
 )
 
 type CryptoHelper interface {

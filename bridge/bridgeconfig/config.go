@@ -20,8 +20,8 @@ import (
 	"go.mau.fi/zeroconfig"
 	"gopkg.in/yaml.v3"
 
-	"maunium.net/go/mautrix/appservice"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/appservice"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type HomeserverSoftware string

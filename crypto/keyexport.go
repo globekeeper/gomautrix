@@ -22,8 +22,8 @@ import (
 
 	"golang.org/x/crypto/pbkdf2"
 
-	"maunium.net/go/mautrix/crypto/olm"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/crypto/olm"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type SenderClaimedKeys struct {

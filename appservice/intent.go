@@ -11,9 +11,9 @@ import (
 	"fmt"
 	"strings"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type IntentAPI struct {

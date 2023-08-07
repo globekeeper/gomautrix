@@ -15,13 +15,13 @@ import (
 
 	"github.com/rs/zerolog"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/appservice"
-	"maunium.net/go/mautrix/bridge/bridgeconfig"
-	"maunium.net/go/mautrix/bridge/status"
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/format"
-	"maunium.net/go/mautrix/id"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/appservice"
+	"github.com/globekeeper/gomautrix/bridge/bridgeconfig"
+	"github.com/globekeeper/gomautrix/bridge/status"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/format"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type CommandProcessor interface {

@@ -14,9 +14,9 @@ import (
 	"io"
 	"net/http"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/id"
-	"maunium.net/go/mautrix/pushrules"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/id"
+	"github.com/globekeeper/gomautrix/pushrules"
 )
 
 type NotificationCounts struct {

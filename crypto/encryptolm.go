@@ -11,10 +11,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/crypto/olm"
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/crypto/olm"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 func (mach *OlmMachine) encryptOlmEvent(ctx context.Context, session *OlmSession, recipient *id.Device, evtType event.Type, content event.Content) *event.EncryptedEventContent {

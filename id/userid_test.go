@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 func TestUserID_Parse(t *testing.T) {

@@ -9,8 +9,8 @@ package mautrix
 import (
 	"sync"
 
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 // StateStore is an interface for storing basic room state information.

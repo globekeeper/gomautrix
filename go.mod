@@ -1,4 +1,4 @@
-module maunium.net/go/mautrix
+module github.com/globekeeper/gomautrix
 
 go 1.19
 

@@ -20,13 +20,13 @@ import (
 	"github.com/rs/zerolog"
 	"go.mau.fi/util/dbutil"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/bridge/bridgeconfig"
-	"maunium.net/go/mautrix/crypto"
-	"maunium.net/go/mautrix/crypto/olm"
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
-	"maunium.net/go/mautrix/sqlstatestore"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/bridge/bridgeconfig"
+	"github.com/globekeeper/gomautrix/crypto"
+	"github.com/globekeeper/gomautrix/crypto/olm"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
+	"github.com/globekeeper/gomautrix/sqlstatestore"
 )
 
 var _ crypto.StateStore = (*sqlstatestore.SQLStateStore)(nil)

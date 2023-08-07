@@ -7,7 +7,7 @@
 package event
 
 import (
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type VerificationMethod string

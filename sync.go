@@ -12,8 +12,8 @@ import (
 	"runtime/debug"
 	"time"
 
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 // EventSource represents the part of the sync response that an event came from.

@@ -9,9 +9,9 @@ package crypto
 import (
 	"fmt"
 
-	"maunium.net/go/mautrix/crypto/olm"
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/crypto/olm"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 // SASData contains the data that users need to verify.

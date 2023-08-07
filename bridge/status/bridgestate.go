@@ -20,8 +20,8 @@ import (
 	"go.mau.fi/util/jsontime"
 	"golang.org/x/exp/maps"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/id"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 type BridgeStateEvent string

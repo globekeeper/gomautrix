@@ -1,5 +1,5 @@
 # mautrix-go
-[![GoDoc](https://pkg.go.dev/badge/maunium.net/go/mautrix)](https://pkg.go.dev/maunium.net/go/mautrix)
+[![GoDoc](https://pkg.go.dev/badge/github.com/globekeeper/gomautrix)](https://pkg.go.dev/github.com/globekeeper/gomautrix)
 
 A Golang Matrix framework. Used by [gomuks](https://matrix.org/docs/projects/client/gomuks),
 [go-neb](https://github.com/matrix-org/go-neb), [mautrix-whatsapp](https://github.com/mautrix/whatsapp)
@@ -20,5 +20,5 @@ In addition to the basic client API features the original project has, this fram
 
 This project contains modules that are licensed under Apache 2.0:
 
-* [maunium.net/go/mautrix/crypto/canonicaljson](crypto/canonicaljson)
-* [maunium.net/go/mautrix/crypto/olm](crypto/olm)
+* [github.com/globekeeper/gomautrix/crypto/canonicaljson](crypto/canonicaljson)
+* [github.com/globekeeper/gomautrix/crypto/olm](crypto/olm)

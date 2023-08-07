@@ -9,8 +9,8 @@ package ssss
 import (
 	"fmt"
 
-	"maunium.net/go/mautrix"
-	"maunium.net/go/mautrix/event"
+	mautrix "github.com/globekeeper/gomautrix"
+	"github.com/globekeeper/gomautrix/event"
 )
 
 // Machine contains utility methods for interacting with SSSS data on the server.

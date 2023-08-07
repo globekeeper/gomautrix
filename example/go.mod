@@ -1,4 +1,4 @@
-module maunium.net/go/mautrix/example
+module github.com/globekeeper/gomautrix/example
 
 go 1.19
 
@@ -6,7 +6,7 @@ require (
 	github.com/chzyer/readline v1.5.1
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/rs/zerolog v1.29.1
-	maunium.net/go/mautrix v0.15.2
+	github.com/globekeeper/gomautrix v0.15.2
 )
 
 require (
@@ -23,4 +23,4 @@ require (
 	maunium.net/go/maulogger/v2 v2.4.1 // indirect
 )
 
-//replace maunium.net/go/mautrix => ../
+//replace github.com/globekeeper/gomautrix => ../

@@ -17,8 +17,8 @@ import (
 
 	"go.mau.fi/util/dbutil"
 
-	"maunium.net/go/mautrix/event"
-	"maunium.net/go/mautrix/id"
+	"github.com/globekeeper/gomautrix/event"
+	"github.com/globekeeper/gomautrix/id"
 )
 
 //go:embed *.sql
