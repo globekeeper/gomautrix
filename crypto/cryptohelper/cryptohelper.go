@@ -146,7 +146,7 @@ func (helper *CryptoHelper) Init() error {
 				Str("username", helper.LoginAs.Identifier.User).
 				Str("device_id", helper.LoginAs.DeviceID.String()).
 				Msg("Logging in")
-			_, err = helper.client.Login(helper.LoginAs)
+			_, err = helper.client.Login(context.Background(), helper.LoginAs)
 			if err != nil {
 				return err
 			}
@@ -206,7 +206,7 @@ func (helper *CryptoHelper) Machine() *crypto.OlmMachine {
 
 func (helper *CryptoHelper) verifyDeviceKeysOnServer() error {
 	helper.log.Debug().Msg("Making sure our device has the expected keys on the server")
-	resp, err := helper.client.QueryKeys(&mautrix.ReqQueryKeys{
+	resp, err := helper.client.QueryKeys(context.Background(), &mautrix.ReqQueryKeys{
 		DeviceKeys: map[id.UserID]mautrix.DeviceIDList{
 			helper.client.UserID: {helper.client.DeviceID},
 		},

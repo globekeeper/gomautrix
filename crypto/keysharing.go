@@ -85,7 +85,7 @@ func (mach *OlmMachine) RequestRoomKey(ctx context.Context, toUser id.UserID, to
 			},
 		}
 
-		mach.Client.SendToDevice(event.ToDeviceRoomKeyRequest, toDeviceCancel)
+		mach.Client.SendToDevice(context.Background(), event.ToDeviceRoomKeyRequest, toDeviceCancel)
 	}()
 	return resChan, nil
 }
@@ -126,7 +126,7 @@ func (mach *OlmMachine) SendRoomKeyRequest(roomID id.RoomID, senderKey id.Sender
 			toDeviceReq.Messages[user][device] = requestEvent
 		}
 	}
-	_, err := mach.Client.SendToDevice(event.ToDeviceRoomKeyRequest, toDeviceReq)
+	_, err := mach.Client.SendToDevice(context.Background(), event.ToDeviceRoomKeyRequest, toDeviceReq)
 	return err
 }
 

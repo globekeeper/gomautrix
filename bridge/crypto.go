@@ -158,7 +158,7 @@ func (helper *CryptoHelper) resyncEncryptionInfo() {
 		log.Debug().Interface("room_ids", roomIDs).Msg("Resyncing rooms")
 		for _, roomID := range roomIDs {
 			var evt event.EncryptionEventContent
-			err = helper.client.StateEvent(roomID, event.StateEncryption, "", &evt)
+			err = helper.client.StateEvent(context.Background(), roomID, event.StateEncryption, "", &evt)
 			if err != nil {
 				log.Err(err).Str("room_id", roomID.String()).Msg("Failed to get encryption event")
 				_, err = helper.bridge.DB.Exec(`
@@ -230,13 +230,13 @@ func (helper *CryptoHelper) loginBot() (*mautrix.Client, bool, error) {
 	// Create a new client instance with the default AS settings (including as_token),
 	// the Login call will then override the access token in the client.
 	client := helper.bridge.AS.NewMautrixClient(helper.bridge.AS.BotMXID())
-	flows, err := client.GetLoginFlows()
+	flows, err := client.GetLoginFlows(context.Background())
 	if err != nil {
 		return nil, deviceID != "", fmt.Errorf("failed to get supported login flows: %w", err)
 	} else if !flows.HasFlow(mautrix.AuthTypeAppservice) {
 		return nil, deviceID != "", fmt.Errorf("homeserver does not support appservice login")
 	}
-	resp, err := client.Login(&mautrix.ReqLogin{
+	resp, err := client.Login(context.Background(), &mautrix.ReqLogin{
 		Type: mautrix.AuthTypeAppservice,
 		Identifier: mautrix.UserIdentifier{
 			Type: mautrix.IdentifierTypeUser,
@@ -256,7 +256,7 @@ func (helper *CryptoHelper) loginBot() (*mautrix.Client, bool, error) {
 
 func (helper *CryptoHelper) verifyKeysAreOnServer() {
 	helper.log.Debug().Msg("Making sure keys are still on server")
-	resp, err := helper.client.QueryKeys(&mautrix.ReqQueryKeys{
+	resp, err := helper.client.QueryKeys(context.Background(), &mautrix.ReqQueryKeys{
 		DeviceKeys: map[id.UserID]mautrix.DeviceIDList{
 			helper.client.UserID: {helper.client.DeviceID},
 		},
@@ -333,7 +333,7 @@ func (helper *CryptoHelper) Reset(startAfterReset bool) {
 	helper.log.Debug().Msg("Crypto syncer stopped, clearing database")
 	helper.clearDatabase()
 	helper.log.Debug().Msg("Crypto database cleared, logging out of all sessions")
-	_, err := helper.client.LogoutAll()
+	_, err := helper.client.LogoutAll(context.Background())
 	if err != nil {
 		helper.log.Warn().Err(err).Msg("Failed to log out all devices")
 	}

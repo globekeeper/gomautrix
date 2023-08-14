@@ -473,7 +473,7 @@ func (mach *OlmMachine) SendEncryptedToDevice(ctx context.Context, device *id.De
 		Str("to_identity_key", device.IdentityKey.String()).
 		Str("olm_session_id", olmSess.ID().String()).
 		Msg("Sending encrypted to-device event")
-	_, err = mach.Client.SendToDevice(event.ToDeviceEncrypted,
+	_, err = mach.Client.SendToDevice(context.Background(), event.ToDeviceEncrypted,
 		&mautrix.ReqSendToDevice{
 			Messages: map[id.UserID]map[id.DeviceID]*event.Content{
 				device.UserID: {
@@ -624,7 +624,7 @@ func (mach *OlmMachine) ShareKeys(ctx context.Context, currentOTKCount int) erro
 	defer mach.otkUploadLock.Unlock()
 	if mach.lastOTKUpload.Add(1 * time.Minute).After(start) {
 		log.Debug().Msg("Checking OTK count from server due to suspiciously close share keys requests")
-		resp, err := mach.Client.UploadKeys(&mautrix.ReqUploadKeys{})
+		resp, err := mach.Client.UploadKeys(context.Background(), &mautrix.ReqUploadKeys{})
 		if err != nil {
 			return fmt.Errorf("failed to check current OTK counts: %w", err)
 		}
@@ -649,7 +649,7 @@ func (mach *OlmMachine) ShareKeys(ctx context.Context, currentOTKCount int) erro
 		OneTimeKeys: oneTimeKeys,
 	}
 	log.Debug().Int("count", len(oneTimeKeys)).Msg("Uploading one-time keys")
-	_, err := mach.Client.UploadKeys(req)
+	_, err := mach.Client.UploadKeys(context.Background(), req)
 	if err != nil {
 		return err
 	}

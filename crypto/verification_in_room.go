@@ -85,7 +85,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationCancel(roomID id.RoomID, userID
 	if err != nil {
 		return err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return err
 }
 
@@ -102,7 +102,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationRequest(roomID id.RoomID, toUse
 	if err != nil {
 		return "", err
 	}
-	resp, err := mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	resp, err := mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	if err != nil {
 		return "", err
 	}
@@ -121,7 +121,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationReady(roomID id.RoomID, transac
 	if err != nil {
 		return err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return err
 }
 
@@ -146,7 +146,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationStart(roomID id.RoomID, toUserI
 	if err != nil {
 		return nil, err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return content, err
 }
 
@@ -187,7 +187,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationAccept(roomID id.RoomID, fromUs
 	if err != nil {
 		return err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return err
 }
 
@@ -203,7 +203,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationKey(roomID id.RoomID, userID id
 	if err != nil {
 		return err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return err
 }
 
@@ -249,7 +249,7 @@ func (mach *OlmMachine) SendInRoomSASVerificationMAC(roomID id.RoomID, userID id
 	if err != nil {
 		return err
 	}
-	_, err = mach.Client.SendMessageEvent(roomID, event.EventEncrypted, encrypted)
+	_, err = mach.Client.SendMessageEvent(context.Background(), roomID, event.EventEncrypted, encrypted)
 	return err
 }
 

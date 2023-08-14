@@ -105,7 +105,7 @@ func (mx *MatrixHandler) joinAndCheckMembers(ctx context.Context, evt *event.Eve
 		return nil
 	}
 
-	members, err := intent.JoinedMembers(resp.RoomID)
+	members, err := intent.JoinedMembers(context.Background(), resp.RoomID)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to get members in room after accepting invite, leaving room")
 		_, _ = intent.LeaveRoom(resp.RoomID)

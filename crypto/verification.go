@@ -55,7 +55,7 @@ const (
 
 // sendToOneDevice sends a to-device event to a single device.
 func (mach *OlmMachine) sendToOneDevice(userID id.UserID, deviceID id.DeviceID, eventType event.Type, content interface{}) error {
-	_, err := mach.Client.SendToDevice(eventType, &mautrix.ReqSendToDevice{
+	_, err := mach.Client.SendToDevice(context.Background(), eventType, &mautrix.ReqSendToDevice{
 		Messages: map[id.UserID]map[id.DeviceID]*event.Content{
 			userID: {
 				deviceID: {

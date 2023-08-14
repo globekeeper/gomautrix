@@ -8,6 +8,7 @@
 package crypto
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -124,7 +125,7 @@ func (mach *OlmMachine) SignOwnMasterKey() error {
 		Str("signature", signature).
 		Msg("Signed own master key with own device key")
 
-	resp, err := mach.Client.UploadSignatures(&mautrix.ReqUploadSignatures{
+	resp, err := mach.Client.UploadSignatures(context.Background(), &mautrix.ReqUploadSignatures{
 		userID: map[string]mautrix.ReqKeysSignatures{
 			masterKey.String(): masterKeyObj,
 		},
@@ -187,7 +188,7 @@ func (mach *OlmMachine) SignOwnDevice(device *id.Device) error {
 // getFullDeviceKeys gets the full device keys object for the given device.
 // This is used because we don't cache some of the details like list of algorithms and unsupported key types.
 func (mach *OlmMachine) getFullDeviceKeys(device *id.Device) (*mautrix.DeviceKeys, error) {
-	devicesKeys, err := mach.Client.QueryKeys(&mautrix.ReqQueryKeys{
+	devicesKeys, err := mach.Client.QueryKeys(context.Background(), &mautrix.ReqQueryKeys{
 		DeviceKeys: mautrix.DeviceKeysRequest{
 			device.UserID: mautrix.DeviceIDList{device.DeviceID},
 		},
@@ -219,7 +220,7 @@ func (mach *OlmMachine) signAndUpload(req mautrix.ReqKeysSignatures, userID id.U
 		},
 	}
 
-	resp, err := mach.Client.UploadSignatures(&mautrix.ReqUploadSignatures{
+	resp, err := mach.Client.UploadSignatures(context.Background(), &mautrix.ReqUploadSignatures{
 		userID: map[string]mautrix.ReqKeysSignatures{
 			signedThing: req,
 		},

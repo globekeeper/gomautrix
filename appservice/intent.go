@@ -7,6 +7,7 @@
 package appservice
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -44,7 +45,7 @@ func (as *AppService) NewIntentAPI(localpart string) *IntentAPI {
 }
 
 func (intent *IntentAPI) Register() error {
-	_, _, err := intent.Client.Register(&mautrix.ReqRegister{
+	_, _, err := intent.Client.Register(context.Background(), &mautrix.ReqRegister{
 		Username:     intent.Localpart,
 		Type:         mautrix.AuthTypeAppservice,
 		InhibitLogin: true,
@@ -94,7 +95,7 @@ func (intent *IntentAPI) EnsureJoined(roomID id.RoomID, extra ...EnsureJoinedPar
 		if !errors.Is(err, mautrix.MForbidden) || bot == nil {
 			return fmt.Errorf("failed to ensure joined: %w", err)
 		}
-		_, inviteErr := bot.InviteUser(roomID, &mautrix.ReqInviteUser{
+		_, inviteErr := bot.InviteUser(context.Background(), roomID, &mautrix.ReqInviteUser{
 			UserID: intent.UserID,
 		})
 		if inviteErr != nil {
@@ -151,7 +152,7 @@ func (intent *IntentAPI) SendMessageEvent(roomID id.RoomID, eventType event.Type
 		return nil, err
 	}
 	contentJSON = intent.AddDoublePuppetValue(contentJSON)
-	return intent.Client.SendMessageEvent(roomID, eventType, contentJSON)
+	return intent.Client.SendMessageEvent(context.Background(), roomID, eventType, contentJSON)
 }
 
 func (intent *IntentAPI) SendMassagedMessageEvent(roomID id.RoomID, eventType event.Type, contentJSON interface{}, ts int64) (*mautrix.RespSendEvent, error) {
@@ -159,7 +160,7 @@ func (intent *IntentAPI) SendMassagedMessageEvent(roomID id.RoomID, eventType ev
 		return nil, err
 	}
 	contentJSON = intent.AddDoublePuppetValue(contentJSON)
-	return intent.Client.SendMessageEvent(roomID, eventType, contentJSON, mautrix.ReqSendEvent{Timestamp: ts})
+	return intent.Client.SendMessageEvent(context.Background(), roomID, eventType, contentJSON, mautrix.ReqSendEvent{Timestamp: ts})
 }
 
 func (intent *IntentAPI) SendStateEvent(roomID id.RoomID, eventType event.Type, stateKey string, contentJSON interface{}) (*mautrix.RespSendEvent, error) {
@@ -169,7 +170,7 @@ func (intent *IntentAPI) SendStateEvent(roomID id.RoomID, eventType event.Type, 
 		}
 	}
 	contentJSON = intent.AddDoublePuppetValue(contentJSON)
-	return intent.Client.SendStateEvent(roomID, eventType, stateKey, contentJSON)
+	return intent.Client.SendStateEvent(context.Background(), roomID, eventType, stateKey, contentJSON)
 }
 
 func (intent *IntentAPI) SendMassagedStateEvent(roomID id.RoomID, eventType event.Type, stateKey string, contentJSON interface{}, ts int64) (*mautrix.RespSendEvent, error) {
@@ -177,21 +178,21 @@ func (intent *IntentAPI) SendMassagedStateEvent(roomID id.RoomID, eventType even
 		return nil, err
 	}
 	contentJSON = intent.AddDoublePuppetValue(contentJSON)
-	return intent.Client.SendMassagedStateEvent(roomID, eventType, stateKey, contentJSON, ts)
+	return intent.Client.SendMassagedStateEvent(context.Background(), roomID, eventType, stateKey, contentJSON, ts)
 }
 
 func (intent *IntentAPI) StateEvent(roomID id.RoomID, eventType event.Type, stateKey string, outContent interface{}) error {
 	if err := intent.EnsureJoined(roomID); err != nil {
 		return err
 	}
-	return intent.Client.StateEvent(roomID, eventType, stateKey, outContent)
+	return intent.Client.StateEvent(context.Background(), roomID, eventType, stateKey, outContent)
 }
 
 func (intent *IntentAPI) State(roomID id.RoomID) (mautrix.RoomStateMap, error) {
 	if err := intent.EnsureJoined(roomID); err != nil {
 		return nil, err
 	}
-	return intent.Client.State(roomID)
+	return intent.Client.State(context.Background(), roomID)
 }
 
 func (intent *IntentAPI) SendCustomMembershipEvent(roomID id.RoomID, target id.UserID, membership event.Membership, reason string, extraContent ...map[string]interface{}) (*mautrix.RespSendEvent, error) {
@@ -206,7 +207,7 @@ func (intent *IntentAPI) SendCustomMembershipEvent(roomID id.RoomID, target id.U
 			ok = memberContent != nil
 		}
 		if !ok {
-			profile, err := intent.GetProfile(target)
+			profile, err := intent.GetProfile(context.Background(), target)
 			if err != nil {
 				intent.Log.Debug().Err(err).
 					Str("target_user_id", target.String()).
@@ -237,7 +238,7 @@ func (intent *IntentAPI) JoinRoomByID(roomID id.RoomID, extraContent ...map[stri
 		_, err = intent.SendCustomMembershipEvent(roomID, intent.UserID, event.MembershipJoin, "", extraContent...)
 		return &mautrix.RespJoinRoom{}, err
 	}
-	return intent.Client.JoinRoomByID(roomID)
+	return intent.Client.JoinRoomByID(context.Background(), roomID)
 }
 
 func (intent *IntentAPI) LeaveRoom(roomID id.RoomID, extra ...interface{}) (resp *mautrix.RespLeaveRoom, err error) {
@@ -255,7 +256,7 @@ func (intent *IntentAPI) LeaveRoom(roomID id.RoomID, extra ...interface{}) (resp
 		_, err = intent.SendCustomMembershipEvent(roomID, intent.UserID, event.MembershipLeave, leaveReq.Reason, extraContent)
 		return &mautrix.RespLeaveRoom{}, err
 	}
-	return intent.Client.LeaveRoom(roomID, leaveReq)
+	return intent.Client.LeaveRoom(context.Background(), roomID, leaveReq)
 }
 
 func (intent *IntentAPI) InviteUser(roomID id.RoomID, req *mautrix.ReqInviteUser, extraContent ...map[string]interface{}) (resp *mautrix.RespInviteUser, err error) {
@@ -263,7 +264,7 @@ func (intent *IntentAPI) InviteUser(roomID id.RoomID, req *mautrix.ReqInviteUser
 		_, err = intent.SendCustomMembershipEvent(roomID, req.UserID, event.MembershipInvite, req.Reason, extraContent...)
 		return &mautrix.RespInviteUser{}, err
 	}
-	return intent.Client.InviteUser(roomID, req)
+	return intent.Client.InviteUser(context.Background(), roomID, req)
 }
 
 func (intent *IntentAPI) KickUser(roomID id.RoomID, req *mautrix.ReqKickUser, extraContent ...map[string]interface{}) (resp *mautrix.RespKickUser, err error) {
@@ -271,7 +272,7 @@ func (intent *IntentAPI) KickUser(roomID id.RoomID, req *mautrix.ReqKickUser, ex
 		_, err = intent.SendCustomMembershipEvent(roomID, req.UserID, event.MembershipLeave, req.Reason, extraContent...)
 		return &mautrix.RespKickUser{}, err
 	}
-	return intent.Client.KickUser(roomID, req)
+	return intent.Client.KickUser(context.Background(), roomID, req)
 }
 
 func (intent *IntentAPI) BanUser(roomID id.RoomID, req *mautrix.ReqBanUser, extraContent ...map[string]interface{}) (resp *mautrix.RespBanUser, err error) {
@@ -279,7 +280,7 @@ func (intent *IntentAPI) BanUser(roomID id.RoomID, req *mautrix.ReqBanUser, extr
 		_, err = intent.SendCustomMembershipEvent(roomID, req.UserID, event.MembershipBan, req.Reason, extraContent...)
 		return &mautrix.RespBanUser{}, err
 	}
-	return intent.Client.BanUser(roomID, req)
+	return intent.Client.BanUser(context.Background(), roomID, req)
 }
 
 func (intent *IntentAPI) UnbanUser(roomID id.RoomID, req *mautrix.ReqUnbanUser, extraContent ...map[string]interface{}) (resp *mautrix.RespUnbanUser, err error) {
@@ -287,7 +288,7 @@ func (intent *IntentAPI) UnbanUser(roomID id.RoomID, req *mautrix.ReqUnbanUser, 
 		_, err = intent.SendCustomMembershipEvent(roomID, req.UserID, event.MembershipLeave, req.Reason, extraContent...)
 		return &mautrix.RespUnbanUser{}, err
 	}
-	return intent.Client.UnbanUser(roomID, req)
+	return intent.Client.UnbanUser(context.Background(), roomID, req)
 }
 
 func (intent *IntentAPI) Member(roomID id.RoomID, userID id.UserID) *event.MemberEventContent {
@@ -328,14 +329,14 @@ func (intent *IntentAPI) SendText(roomID id.RoomID, text string) (*mautrix.RespS
 	if err := intent.EnsureJoined(roomID); err != nil {
 		return nil, err
 	}
-	return intent.Client.SendText(roomID, text)
+	return intent.Client.SendText(context.Background(), roomID, text)
 }
 
 func (intent *IntentAPI) SendNotice(roomID id.RoomID, text string) (*mautrix.RespSendEvent, error) {
 	if err := intent.EnsureJoined(roomID); err != nil {
 		return nil, err
 	}
-	return intent.Client.SendNotice(roomID, text)
+	return intent.Client.SendNotice(context.Background(), roomID, text)
 }
 
 func (intent *IntentAPI) RedactEvent(roomID id.RoomID, eventID id.EventID, extra ...mautrix.ReqRedact) (*mautrix.RespSendEvent, error) {
@@ -347,7 +348,7 @@ func (intent *IntentAPI) RedactEvent(roomID id.RoomID, eventID id.EventID, extra
 		req = extra[0]
 	}
 	intent.AddDoublePuppetValue(&req.Extra)
-	return intent.Client.RedactEvent(roomID, eventID, req)
+	return intent.Client.RedactEvent(context.Background(), roomID, eventID, req)
 }
 
 func (intent *IntentAPI) SetRoomName(roomID id.RoomID, roomName string) (*mautrix.RespSendEvent, error) {
@@ -372,35 +373,35 @@ func (intent *IntentAPI) SetDisplayName(displayName string) error {
 	if err := intent.EnsureRegistered(); err != nil {
 		return err
 	}
-	resp, err := intent.Client.GetOwnDisplayName()
+	resp, err := intent.Client.GetOwnDisplayName(context.Background())
 	if err != nil {
 		return fmt.Errorf("failed to check current displayname: %w", err)
 	} else if resp.DisplayName == displayName {
 		// No need to update
 		return nil
 	}
-	return intent.Client.SetDisplayName(displayName)
+	return intent.Client.SetDisplayName(context.Background(), displayName)
 }
 
 func (intent *IntentAPI) SetAvatarURL(avatarURL id.ContentURI) error {
 	if err := intent.EnsureRegistered(); err != nil {
 		return err
 	}
-	resp, err := intent.Client.GetOwnAvatarURL()
+	resp, err := intent.Client.GetOwnAvatarURL(context.Background())
 	if err != nil {
 		return fmt.Errorf("failed to check current avatar URL: %w", err)
 	} else if resp.FileID == avatarURL.FileID && resp.Homeserver == avatarURL.Homeserver {
 		// No need to update
 		return nil
 	}
-	return intent.Client.SetAvatarURL(avatarURL)
+	return intent.Client.SetAvatarURL(context.Background(), avatarURL)
 }
 
 func (intent *IntentAPI) Whoami() (*mautrix.RespWhoami, error) {
 	if err := intent.EnsureRegistered(); err != nil {
 		return nil, err
 	}
-	return intent.Client.Whoami()
+	return intent.Client.Whoami(context.Background())
 }
 
 func (intent *IntentAPI) EnsureInvited(roomID id.RoomID, userID id.UserID) error {

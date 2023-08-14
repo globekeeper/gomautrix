@@ -8,6 +8,7 @@
 package crypto
 
 import (
+	"context"
 	"fmt"
 
 	mautrix "github.com/globekeeper/gomautrix"
@@ -134,7 +135,7 @@ func (mach *OlmMachine) PublishCrossSigningKeys(keys *CrossSigningKeysCache, uia
 		},
 	}
 
-	err = mach.Client.UploadCrossSigningKeys(&mautrix.UploadCrossSigningKeysReq{
+	err = mach.Client.UploadCrossSigningKeys(context.Background(), &mautrix.UploadCrossSigningKeysReq{
 		Master:      masterKey,
 		SelfSigning: selfKey,
 		UserSigning: userKey,

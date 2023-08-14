@@ -7,6 +7,7 @@
 package crypto
 
 import (
+	"context"
 	"fmt"
 
 	mautrix "github.com/globekeeper/gomautrix"
@@ -58,7 +59,7 @@ func (mach *OlmMachine) GetCrossSigningPublicKeys(userID id.UserID) (*CrossSigni
 		}
 	}
 
-	keys, err := mach.Client.QueryKeys(&mautrix.ReqQueryKeys{
+	keys, err := mach.Client.QueryKeys(context.Background(), &mautrix.ReqQueryKeys{
 		DeviceKeys: mautrix.DeviceKeysRequest{
 			userID: mautrix.DeviceIDList{},
 		},

@@ -7,6 +7,7 @@
 package bridge
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -283,7 +284,7 @@ var MinSpecVersion = mautrix.SpecV11
 
 func (br *Bridge) ensureConnection() {
 	for {
-		versions, err := br.Bot.Versions()
+		versions, err := br.Bot.Versions(context.Background())
 		if err != nil {
 			br.ZLog.Err(err).Msg("Failed to connect to homeserver, retrying in 10 seconds...")
 			time.Sleep(10 * time.Second)
@@ -340,7 +341,7 @@ func (br *Bridge) ensureConnection() {
 	const maxRetries = 6
 	for {
 		txnID = br.Bot.TxnID()
-		pingResp, err = br.Bot.AppservicePing(br.Config.AppService.ID, txnID)
+		pingResp, err = br.Bot.AppservicePing(context.Background(), br.Config.AppService.ID, txnID)
 		if err == nil {
 			break
 		}
@@ -380,7 +381,7 @@ func (br *Bridge) ensureConnection() {
 }
 
 func (br *Bridge) fetchMediaConfig() {
-	cfg, err := br.Bot.GetMediaConfig()
+	cfg, err := br.Bot.GetMediaConfig(context.Background())
 	if err != nil {
 		br.ZLog.Warn().Err(err).Msg("Failed to fetch media config")
 	} else {
@@ -414,7 +415,7 @@ func (br *Bridge) UpdateBotProfile() {
 
 	if br.SpecVersions.Supports(mautrix.BeeperFeatureArbitraryProfileMeta) && br.BeeperNetworkName != "" {
 		br.ZLog.Debug().Msg("Setting contact info on the appservice bot")
-		br.Bot.BeeperUpdateProfile(map[string]any{
+		br.Bot.BeeperUpdateProfile(context.Background(), map[string]any{
 			"com.beeper.bridge.service":       br.BeeperServiceName,
 			"com.beeper.bridge.network":       br.BeeperNetworkName,
 			"com.beeper.bridge.is_bridge_bot": true,

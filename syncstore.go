@@ -1,6 +1,7 @@
 package mautrix
 
 import (
+	"context"
 	"errors"
 
 	"github.com/globekeeper/gomautrix/id"
@@ -97,7 +98,7 @@ func (s *AccountDataStore) SaveNextBatch(userID id.UserID, nextBatchToken string
 		NextBatch: nextBatchToken,
 	}
 
-	err := s.client.SetAccountData(s.EventType, data)
+	err := s.client.SetAccountData(context.Background(), s.EventType, data)
 	if err != nil {
 		s.client.Log.Warn().Err(err).Msg("Failed to save next batch token to account data")
 	} else {
@@ -116,7 +117,7 @@ func (s *AccountDataStore) LoadNextBatch(userID id.UserID) string {
 
 	data := &accountData{}
 
-	err := s.client.GetAccountData(s.EventType, data)
+	err := s.client.GetAccountData(context.Background(), s.EventType, data)
 	if err != nil {
 		if errors.Is(err, MNotFound) {
 			s.client.Log.Debug().Msg("No next batch token found in account data")

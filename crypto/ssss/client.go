@@ -7,6 +7,7 @@
 package ssss
 
 import (
+	"context"
 	"fmt"
 
 	mautrix "github.com/globekeeper/gomautrix"
@@ -31,7 +32,7 @@ type DefaultSecretStorageKeyContent struct {
 // GetDefaultKeyID retrieves the default key ID for this account from SSSS.
 func (mach *Machine) GetDefaultKeyID() (string, error) {
 	var data DefaultSecretStorageKeyContent
-	err := mach.Client.GetAccountData(event.AccountDataSecretStorageDefaultKey.Type, &data)
+	err := mach.Client.GetAccountData(context.Background(), event.AccountDataSecretStorageDefaultKey.Type, &data)
 	if err != nil {
 		if httpErr, ok := err.(mautrix.HTTPError); ok && httpErr.RespError != nil && httpErr.RespError.ErrCode == "M_NOT_FOUND" {
 			return "", ErrNoDefaultKeyAccountDataEvent
@@ -46,19 +47,19 @@ func (mach *Machine) GetDefaultKeyID() (string, error) {
 
 // SetDefaultKeyID sets the default key ID for this account on the server.
 func (mach *Machine) SetDefaultKeyID(keyID string) error {
-	return mach.Client.SetAccountData(event.AccountDataSecretStorageDefaultKey.Type, &DefaultSecretStorageKeyContent{keyID})
+	return mach.Client.SetAccountData(context.Background(), event.AccountDataSecretStorageDefaultKey.Type, &DefaultSecretStorageKeyContent{keyID})
 }
 
 // GetKeyData gets the details about the given key ID.
 func (mach *Machine) GetKeyData(keyID string) (keyData *KeyMetadata, err error) {
 	keyData = &KeyMetadata{id: keyID}
-	err = mach.Client.GetAccountData(fmt.Sprintf("%s.%s", event.AccountDataSecretStorageKey.Type, keyID), keyData)
+	err = mach.Client.GetAccountData(context.Background(), fmt.Sprintf("%s.%s", event.AccountDataSecretStorageKey.Type, keyID), keyData)
 	return
 }
 
 // SetKeyData stores SSSS key metadata on the server.
 func (mach *Machine) SetKeyData(keyID string, keyData *KeyMetadata) error {
-	return mach.Client.SetAccountData(fmt.Sprintf("%s.%s", event.AccountDataSecretStorageKey.Type, keyID), keyData)
+	return mach.Client.SetAccountData(context.Background(), fmt.Sprintf("%s.%s", event.AccountDataSecretStorageKey.Type, keyID), keyData)
 }
 
 // GetDefaultKeyData gets the details about the default key ID (see GetDefaultKeyID).
@@ -74,7 +75,7 @@ func (mach *Machine) GetDefaultKeyData() (keyID string, keyData *KeyMetadata, er
 // GetDecryptedAccountData gets the account data event with the given event type and decrypts it using the given key.
 func (mach *Machine) GetDecryptedAccountData(eventType event.Type, key *Key) ([]byte, error) {
 	var encData EncryptedAccountDataEventContent
-	err := mach.Client.GetAccountData(eventType.Type, &encData)
+	err := mach.Client.GetAccountData(context.Background(), eventType.Type, &encData)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (mach *Machine) SetEncryptedAccountData(eventType event.Type, data []byte, 
 	for _, key := range keys {
 		encrypted[key.ID] = key.Encrypt(eventType.Type, data)
 	}
-	return mach.Client.SetAccountData(eventType.Type, &EncryptedAccountDataEventContent{Encrypted: encrypted})
+	return mach.Client.SetAccountData(context.Background(), eventType.Type, &EncryptedAccountDataEventContent{Encrypted: encrypted})
 }
 
 // GenerateAndUploadKey generates a new SSSS key and stores the metadata on the server.

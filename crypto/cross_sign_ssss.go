@@ -7,6 +7,7 @@
 package crypto
 
 import (
+	"context"
 	"fmt"
 
 	mautrix "github.com/globekeeper/gomautrix"
@@ -43,7 +44,7 @@ func (mach *OlmMachine) retrieveDecryptXSigningKey(keyName event.Type, key *ssss
 	var encData ssss.EncryptedAccountDataEventContent
 
 	// retrieve and parse the account data for this key type from SSSS
-	err := mach.Client.GetAccountData(keyName.Type, &encData)
+	err := mach.Client.GetAccountData(context.Background(), keyName.Type, &encData)
 	if err != nil {
 		return decryptedKey, err
 	}
