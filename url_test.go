@@ -20,7 +20,7 @@ func TestClient_BuildURL(t *testing.T) {
 	assert.Equal(t, cli.HomeserverURL.Scheme, "https")
 	assert.Equal(t, cli.HomeserverURL.Host, "example.com")
 	assert.Equal(t, cli.HomeserverURL.Path, "")
-	built := cli.BuildClientURL("v3", "foo/bar%2F🐈 1", "hello", "world")
+	built := cli.BuildClientURL("r0", "foo/bar%2F🐈 1", "hello", "world")
 	assert.Equal(t, "https://example.com/_matrix/client/v3/foo%2Fbar%252F%F0%9F%90%88%201/hello/world", built)
 }
 
@@ -30,7 +30,7 @@ func TestClient_BuildURL_HTTP(t *testing.T) {
 	assert.Equal(t, cli.HomeserverURL.Scheme, "http")
 	assert.Equal(t, cli.HomeserverURL.Host, "example.com")
 	assert.Equal(t, cli.HomeserverURL.Path, "")
-	built := cli.BuildClientURL("v3", "foo/bar%2F🐈 1", "hello", "world")
+	built := cli.BuildClientURL("r0", "foo/bar%2F🐈 1", "hello", "world")
 	assert.Equal(t, "http://example.com/_matrix/client/v3/foo%2Fbar%252F%F0%9F%90%88%201/hello/world", built)
 }
 
@@ -40,7 +40,7 @@ func TestClient_BuildURL_MissingScheme(t *testing.T) {
 	assert.Equal(t, cli.HomeserverURL.Scheme, "https")
 	assert.Equal(t, cli.HomeserverURL.Host, "example.com")
 	assert.Equal(t, cli.HomeserverURL.Path, "")
-	built := cli.BuildClientURL("v3", "foo/bar%2F🐈 1", "hello", "world")
+	built := cli.BuildClientURL("r0", "foo/bar%2F🐈 1", "hello", "world")
 	assert.Equal(t, "https://example.com/_matrix/client/v3/foo%2Fbar%252F%F0%9F%90%88%201/hello/world", built)
 }
 
@@ -50,7 +50,7 @@ func TestClient_BuildURL_WithPath(t *testing.T) {
 	assert.Equal(t, cli.HomeserverURL.Scheme, "https")
 	assert.Equal(t, cli.HomeserverURL.Host, "example.com")
 	assert.Equal(t, cli.HomeserverURL.Path, "/base")
-	built := cli.BuildClientURL("v3", "foo/bar%2F🐈 1", "hello", "world")
+	built := cli.BuildClientURL("r0", "foo/bar%2F🐈 1", "hello", "world")
 	assert.Equal(t, "https://example.com/base/_matrix/client/v3/foo%2Fbar%252F%F0%9F%90%88%201/hello/world", built)
 }
 
@@ -60,6 +60,6 @@ func TestClient_BuildURL_MissingSchemeWithPath(t *testing.T) {
 	assert.Equal(t, cli.HomeserverURL.Scheme, "https")
 	assert.Equal(t, cli.HomeserverURL.Host, "example.com")
 	assert.Equal(t, cli.HomeserverURL.Path, "/base")
-	built := cli.BuildClientURL("v3", "foo/bar%2F🐈 1", "hello", "world")
+	built := cli.BuildClientURL("r0", "foo/bar%2F🐈 1", "hello", "world")
 	assert.Equal(t, "https://example.com/base/_matrix/client/v3/foo%2Fbar%252F%F0%9F%90%88%201/hello/world", built)
 }

@@ -19,6 +19,7 @@ const (
 	AuthTypeEmail      AuthType = "m.login.email.identity"
 	AuthTypeMSISDN     AuthType = "m.login.msisdn"
 	AuthTypeToken      AuthType = "m.login.token"
+	AuthTypeTotp       AuthType = "login.totp"
 	AuthTypeDummy      AuthType = "m.login.dummy"
 	AuthTypeAppservice AuthType = "m.login.application_service"
 
@@ -85,6 +86,35 @@ type ReqLogin struct {
 	StoreCredentials bool `json:"-"`
 	// Whether or not the returned .well-known data should update the homeserver URL in the Client
 	StoreHomeserverURL bool `json:"-"`
+
+	InhibitDevice bool   `json:"inhibit_device"`
+	TotpSid       string `json:"totp_sid"`
+	Passcode      string `json:"passcode"`
+	Sid           string `json:"sid,omitempty"`
+}
+
+// ThirdpartyIdentifier is the Identifier for https://matrix.org/docs/spec/client_server/r0.6.0#third-party-id
+type ThirdpartyIdentifier struct {
+	IDType  string `json:"type"` // Set by NewThirdpartyIdentifier
+	Medium  string `json:"medium"`
+	Address string `json:"address"`
+}
+
+// NewThirdpartyIdentifier creates a new UserIdentifier with IDType set to "m.id.thirdparty"
+func NewThirdpartyIdentifier(medium, address string) UserIdentifier {
+	return UserIdentifier{
+		Type:    IdentifierTypeThirdParty,
+		Medium:  medium,
+		Address: address,
+	}
+}
+
+// NewUserIdentifier creates a new UserIdentifier with IDType set to "m.id.user"
+func NewUserIdentifier(user string) UserIdentifier {
+	return UserIdentifier{
+		Type: IdentifierTypeUser,
+		User: user,
+	}
 }
 
 type ReqUIAuthFallback struct {
@@ -446,4 +476,45 @@ type ReqRoomKeysSessionUpdate struct {
 	ForwardedCount    int             `json:"forwarded_count"`
 	IsVerified        bool            `json:"is_verified"`
 	SessionData       json.RawMessage `json:"session_data"`
+}
+
+// ReqGetAccountData is the JSON request for https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-user-userid-account-data-type
+type ReqGetAccountData struct {
+	Type string
+}
+
+// ReqEmailRequestToken is the JSON request for
+//
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-register-email-requesttoken
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-password-email-requesttoken
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
+type ReqEmailRequestToken struct {
+	IdServer      string `json:"id_server,omitempty"`
+	IdAccessToken string `json:"id_access_token,omitempty"`
+	Secret        string `json:"client_secret"`
+	Email         string `json:"email"`
+	SendAttempt   int    `json:"send_attempt"`
+	NextLink      string `json:"next_link,omitempty"`
+}
+
+type ReqPostThreePID struct {
+	ThreePIDCredes ThreePIDCreds `json:"three_pid_creds"`
+}
+
+type ThreePIDCreds struct {
+	ClientSecret  string `json:"client_secret"`
+	IdAccessToken string `json:"id_access_token,omitempty"`
+	IdServer      string `json:"id_server"`
+	Sid           string `json:"sid"`
+}
+
+type ReqAccountPassword struct {
+	LogoutDevices bool        `json:"logout_devices"`
+	NewPassword   string      `json:"new_password"`
+	Auth          interface{} `json:"auth"`
+}
+
+type ReqUserDirectorySearch struct {
+	Limit      int32  `json:"limit"`
+	SearchTerm string `json:"search_term"`
 }

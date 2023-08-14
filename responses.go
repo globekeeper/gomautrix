@@ -214,6 +214,7 @@ type RespLogin struct {
 	DeviceID    id.DeviceID      `json:"device_id"`
 	UserID      id.UserID        `json:"user_id"`
 	WellKnown   *ClientWellKnown `json:"well_known,omitempty"`
+	TotpSid     string           `json:"totp_sid"`
 }
 
 // RespLogout is the JSON response for https://spec.matrix.org/v1.2/client-server-api/#post_matrixclientv3logout
@@ -603,4 +604,41 @@ type RespRoomKeysSession struct {
 type RespRoomKeysUpdate struct {
 	Count int    `json:"count"`
 	ETag  string `json:"etag"`
+}
+
+// RespGetThreePID is JSON response for https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-account-3pid
+type RespGetThreePID struct {
+	ThreePIDs []ThreePID `json:"threepids"`
+}
+
+type ThreePID struct {
+	AddedAt     int    `json:"added_at"`
+	Address     string `json:"address"`
+	Medium      string `json:"medium"`
+	ValidatedAt int    `json:"validated_at"`
+}
+
+// RespAccountData is JSON response for https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-user-userid-account-data-type
+type RespAccountData map[string]interface{}
+
+// RespEmailRequestToken is JSON response for
+//
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-register-email-requesttoken
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-password-email-requesttoken
+//	https://matrix.org/docs/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
+type RespEmailRequestToken struct {
+	Sid       string `json:"sid"`
+	SumbitURL string `json:"submit_url"`
+}
+
+type RespUserDirectorySearch struct {
+	Limited bool     `json:"limited"`
+	Results []Result `json:"results"`
+}
+
+type Result struct {
+	AvatarUrl   string    `json:"avatar_url"`
+	DisplayName string    `json:"display_name"`
+	UserId      id.UserID `json:"user_id"`
+	Status      int32     `json:"status"`
 }
