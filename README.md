@@ -1,9 +1,9 @@
-# mautrix-go
+# GlobeKeeper - mautrix-go
 [![GoDoc](https://pkg.go.dev/badge/github.com/globekeeper/gomautrix)](https://pkg.go.dev/github.com/globekeeper/gomautrix)
 
 A Golang Matrix framework. Used by [gomuks](https://matrix.org/docs/projects/client/gomuks),
 [go-neb](https://github.com/matrix-org/go-neb), [mautrix-whatsapp](https://github.com/mautrix/whatsapp)
-and others.
+and others. Customized for GlobeKeeper Connnect backend application.
 
 Matrix room: [`#maunium:maunium.net`](https://matrix.to/#/#maunium:maunium.net)
 
