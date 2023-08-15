@@ -359,6 +359,7 @@ type ReqPutPushRule struct {
 	Actions    []pushrules.PushActionType `json:"actions"`
 	Conditions []pushrules.PushCondition  `json:"conditions"`
 	Pattern    string                     `json:"pattern"`
+	Enabled    bool                       `json:"enabled"`
 }
 
 // Deprecated: MSC2716 was abandoned
