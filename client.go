@@ -1253,8 +1253,7 @@ func (cli *Client) GetOwnPresence(ctx context.Context) (resp *RespPresence, err 
 	return cli.GetPresence(ctx, cli.UserID)
 }
 
-func (cli *Client) SetPresence(ctx context.Context, status event.Presence) (err error) {
-	req := ReqPresence{Presence: status}
+func (cli *Client) SetPresence(ctx context.Context, req ReqPresence) (err error) {
 	u := cli.BuildClientURL("v3", "presence", cli.UserID, "status")
 	_, err = cli.MakeRequest(ctx, "PUT", u, req, nil)
 	return

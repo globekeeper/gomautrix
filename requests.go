@@ -203,8 +203,10 @@ type ReqTyping struct {
 	Timeout int64 `json:"timeout,omitempty"`
 }
 
+// ReqPresence is the JSON request for https://spec.matrix.org/v1.7/client-server-api/#mpresence
 type ReqPresence struct {
-	Presence event.Presence `json:"presence"`
+	Presence  event.Presence `json:"presence"`
+	StatusMsg string         `json:"status_msg"`
 }
 
 type ReqAliasCreate struct {
