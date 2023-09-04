@@ -213,6 +213,7 @@ type RespLogin struct {
 	AccessToken string           `json:"access_token"`
 	DeviceID    id.DeviceID      `json:"device_id"`
 	UserID      id.UserID        `json:"user_id"`
+	HomeServer  string           `json:"home_server"`
 	WellKnown   *ClientWellKnown `json:"well_known,omitempty"`
 	TotpSid     string           `json:"totp_sid"`
 }
