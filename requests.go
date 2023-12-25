@@ -20,7 +20,7 @@ const (
 	AuthTypeMSISDN     AuthType = "m.login.msisdn"
 	AuthTypeToken      AuthType = "m.login.token"
 	AuthTypeTotp       AuthType = "login.totp"
-	AuthTypeGeodome    AuthType = "connect.login.external_auth.geodome"
+	AuthTypeGeodome    AuthType = "connect.login.external.geodome"
 	AuthTypeDummy      AuthType = "m.login.dummy"
 	AuthTypeAppservice AuthType = "m.login.application_service"
 
@@ -92,6 +92,9 @@ type ReqLogin struct {
 	TotpSid       string `json:"totp_sid"`
 	Passcode      string `json:"passcode"`
 	Sid           string `json:"sid,omitempty"`
+
+	// Added for Geodome login
+	Username string `json:"username,omitempty"`
 }
 
 // ThirdpartyIdentifier is the Identifier for https://matrix.org/docs/spec/client_server/r0.6.0#third-party-id
