@@ -20,6 +20,7 @@ const (
 	AuthTypeMSISDN     AuthType = "m.login.msisdn"
 	AuthTypeToken      AuthType = "m.login.token"
 	AuthTypeTotp       AuthType = "login.totp"
+	AuthTypeGeodome    AuthType = "connect.login.external_auth.geodome"
 	AuthTypeDummy      AuthType = "m.login.dummy"
 	AuthTypeAppservice AuthType = "m.login.application_service"
 
